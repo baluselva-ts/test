@@ -1,8 +1,10 @@
 package com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.resource;
 
-import com.bala.sf.domain.base.BaseService;
-import com.bala.sf.domain.supabase.BaseSupabaseResourceImpl;
-import com.bala.sf.domain.supabase.BaseSupabaseService;
+import com.tekion.arorapostgres.resource.BasePostgresResourceImpl;
+import com.tekion.commons.service.BaseService;
+import com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.domain.AssetUserPermissionMappingDomain;
+import com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.entity.AssetUserPermissionMappingEntity;
+import com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.service.AssetUserPermissionMappingService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -10,26 +12,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/account")
+@RequestMapping("/v1/asset-user-permission-mapping")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@Tag(name = "Account", description = "Account management APIs")
-public class AssetUserPermissionMappingResourceImpl extends BaseSupabaseResourceImpl<AccountEntity, AccountDomain>
+@Tag(name = "AssetUserPermissionMapping", description = "AssetUserPermissionMapping APIssss")
+public class AssetUserPermissionMappingResourceImpl extends BasePostgresResourceImpl<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain>
         implements AssetUserPermissionMappingResource {
 
-    AccountService service;
+    AssetUserPermissionMappingService service;
 
-    public AssetUserPermissionMappingResourceImpl(AccountService service) {
+    public AssetUserPermissionMappingResourceImpl(AssetUserPermissionMappingService service) {
         this.service = service;
     }
-    
 
     @Override
-    protected BaseService<AccountEntity, AccountDomain, Long> getBaseService() {
-        return service;
-    }
-
-    @Override
-    protected BaseSupabaseService<AccountEntity, AccountDomain> getSupabaseService() {
+    protected BaseService<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, Long> getBaseService() {
         return service;
     }
 }

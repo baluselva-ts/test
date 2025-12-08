@@ -1,12 +1,16 @@
 package com.tekion.commons.domain;
 
-import lombok.AccessLevel;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 
-@Data
+@Getter
+@Setter
+@SuperBuilder(toBuilder = true)
+@ToString
+@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class BaseDomain {
 
@@ -23,6 +27,6 @@ public abstract class BaseDomain {
 	    Instant createdAt;
 	    String createdBy;
 	    Instant lastUpdatedAt;
-	    String latUpdatedBy;
+	    String lastUpdatedBy;
 
 }

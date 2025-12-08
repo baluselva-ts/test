@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.14'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'nu.studer.jooq' version '7.1.1'
 }
 
 group = 'com.tekion'
@@ -18,10 +19,19 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    jooqGenerator
 }
 
 repositories {
     mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'build/generated-src/jooq'
+        }
+    }
 }
 
 dependencies {
@@ -41,6 +51,12 @@ dependencies {
 
 	    // JOOQ for database access
 	    implementation 'org.jooq:jooq:3.16.20'
+	    jooqGenerator 'org.jooq:jooq-meta:3.16.20'
+	    jooqGenerator 'org.jooq:jooq-codegen:3.16.20'
+	    jooqGenerator 'org.jooq:jooq-meta-extensions:3.16.20'
+	    jooqGenerator 'com.h2database:h2:2.1.214'
+	    jooqGenerator 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+	    jooqGenerator 'org.glassfish.jaxb:jaxb-runtime:3.0.2'
 
 	    compileOnly 'org.projectlombok:lombok'
 	    developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -53,4 +69,54 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// JOOQ Code Generation Configuration
+jooq {
+    version = '3.16.20'
+    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+
+    configurations {
+        main {
+            generateSchemaSourceOnCompilation = false  // Manual generation only
+
+            generationTool {
+                jdbc {
+                    driver = 'org.h2.Driver'
+                    url = 'jdbc:h2:mem:jooq_codegen'
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.extensions.ddl.DDLDatabase'
+                        properties {
+                            property {
+                                key = 'scripts'
+                                value = 'src/main/resources/db/schema/*.sql'
+                            }
+                            property {
+                                key = 'sort'
+                                value = 'semantic'
+                            }
+                            property {
+                                key = 'defaultNameCase'
+                                value = 'lower'
+                            }
+                        }
+                    }
+                    generate {
+                        pojos = false
+                        daos = false
+                        interfaces = false
+                        records = true
+                        fluentSetters = true
+                    }
+                    target {
+                        packageName = 'com.tekion.rolesandpermissionsv2.jooq.generated'
+                        directory = 'build/generated-src/jooq'
+                    }
+                }
+            }
+        }
+    }
 }

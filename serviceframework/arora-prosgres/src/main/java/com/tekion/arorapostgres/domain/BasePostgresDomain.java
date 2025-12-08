@@ -1,10 +1,13 @@
 package com.tekion.arorapostgres.domain;
 
 import com.tekion.commons.domain.BaseDomain;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Data
+@Getter
+@Setter
+@SuperBuilder(toBuilder = true)
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public abstract class BasePostgresDomain extends BaseDomain {
 }

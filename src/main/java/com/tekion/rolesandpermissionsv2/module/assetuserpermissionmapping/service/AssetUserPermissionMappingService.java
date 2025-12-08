@@ -1,7 +1,9 @@
 package com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.service;
 
-import com.bala.sf.domain.supabase.BaseSupabaseService;
+import com.tekion.arorapostgres.service.BasePostgresService;
+import com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.domain.AssetUserPermissionMappingDomain;
+import com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.entity.AssetUserPermissionMappingEntity;
 
-public interface AssetUserPermissionMappingService extends BaseSupabaseService<AccountEntity, AccountDomain> {
+public interface AssetUserPermissionMappingService extends BasePostgresService<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain> {
 
 }

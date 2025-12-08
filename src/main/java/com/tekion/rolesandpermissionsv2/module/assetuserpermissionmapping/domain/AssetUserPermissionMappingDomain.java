@@ -9,9 +9,8 @@ import lombok.experimental.SuperBuilder;
 
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder(toBuilder = true)
-@Data 
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 @ToString(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
