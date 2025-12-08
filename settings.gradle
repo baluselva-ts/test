@@ -1,0 +1,7 @@
+rootProject.name = 'rolesandpermissionsv2'
+
+include 'serviceframework'
+include 'serviceframework:commons'
+include 'serviceframework'
+include 'serviceframework:commons'
+include 'serviceframework:arora-prosgres'
