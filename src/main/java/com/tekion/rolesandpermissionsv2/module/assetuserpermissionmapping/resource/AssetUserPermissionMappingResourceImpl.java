@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/asset-user-permission-mapping")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@Tag(name = "AssetUserPermissionMapping", description = "AssetUserPermissionMapping APIssss")
+@Tag(name = "AssetUserPermissionMapping", description = "AssetUserPermissionMapping APIs")
 public class AssetUserPermissionMappingResourceImpl extends BasePostgresResourceImpl<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain>
         implements AssetUserPermissionMappingResource {
 
@@ -25,7 +25,7 @@ public class AssetUserPermissionMappingResourceImpl extends BasePostgresResource
     }
 
     @Override
-    protected BaseService<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, Long> getBaseService() {
+    protected BaseService<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, String> getBaseService() {
         return service;
     }
 }

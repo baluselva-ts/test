@@ -18,6 +18,6 @@ import lombok.experimental.SuperBuilder;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Accessors(chain = true)
 @NoArgsConstructor
-public abstract class BasePostgresEntity extends BaseEntity<Long> {
+public abstract class BasePostgresEntity extends BaseEntity<String> {
 
 }

@@ -11,6 +11,7 @@ import java.time.Instant;
 @SuperBuilder(toBuilder = true)
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class BaseDomain {
 

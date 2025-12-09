@@ -25,11 +25,16 @@ public abstract class BaseEntity<ID> {
     String name;
     String label;
     String scopeId;
-    Boolean isDeleted;
-    Boolean isArchived;
-    Boolean isCustom;
-    Boolean isReadOnly;
-    Boolean isInternal;
+    @Builder.Default
+    Boolean isDeleted = false;
+    @Builder.Default
+    Boolean isArchived = false;
+    @Builder.Default
+    Boolean isCustom = false;
+    @Builder.Default
+    Boolean isReadOnly = false;
+    @Builder.Default
+    Boolean isInternal = false;
     Long version;
     Instant createdAt;
     String createdBy;

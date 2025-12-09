@@ -8,7 +8,7 @@ import com.tekion.commons.response.PageResponse;
 import com.tekion.commons.service.BaseServiceImpl;
 import lombok.NonNull;
 
-public class BasePostgresServiceImpl<E extends BasePostgresEntity, D extends BasePostgresDomain> extends BaseServiceImpl<E, D, Long> implements BasePostgresService<E, D> {
+public class BasePostgresServiceImpl<E extends BasePostgresEntity, D extends BasePostgresDomain> extends BaseServiceImpl<E, D, String> implements BasePostgresService<E, D> {
 
     private final BasePostgresRepo<E, D> repository;
 

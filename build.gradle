@@ -41,9 +41,8 @@ dependencies {
 	    implementation project(':serviceframework:commons')
 	    implementation project(':serviceframework:arora-prosgres')
 
-	    // Swagger/OpenAPI dependencies
-	    implementation 'io.springfox:springfox-boot-starter:3.0.0'
-	    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+	    // SpringDoc OpenAPI (replaces Springfox)
+	    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
 	    // MapStruct for object mapping
 	    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
@@ -51,12 +50,16 @@ dependencies {
 
 	    // JOOQ for database access
 	    implementation 'org.jooq:jooq:3.16.20'
+	    implementation 'org.springframework.boot:spring-boot-starter-jooq'
 	    jooqGenerator 'org.jooq:jooq-meta:3.16.20'
 	    jooqGenerator 'org.jooq:jooq-codegen:3.16.20'
 	    jooqGenerator 'org.jooq:jooq-meta-extensions:3.16.20'
 	    jooqGenerator 'com.h2database:h2:2.1.214'
 	    jooqGenerator 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
 	    jooqGenerator 'org.glassfish.jaxb:jaxb-runtime:3.0.2'
+
+	    // PostgreSQL driver for Supabase
+	    implementation 'org.postgresql:postgresql:42.7.1'
 
 	    compileOnly 'org.projectlombok:lombok'
 	    developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -119,4 +122,12 @@ jooq {
             }
         }
     }
+}
+
+// Make clean task automatically run generateJooq after completion
+clean.finalizedBy(generateJooq)
+
+// Ensure compileJava depends on generateJooq to avoid task ordering issues
+tasks.named('compileJava') {
+    dependsOn tasks.named('generateJooq')
 }

@@ -9,5 +9,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public abstract class BasePostgresDomain extends BaseDomain {
 }

@@ -18,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class PersonaEntity extends BasePostgresEntity {
+
     private String permissionEncoding;
 
     @Override

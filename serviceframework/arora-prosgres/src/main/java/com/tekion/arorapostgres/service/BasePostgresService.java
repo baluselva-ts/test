@@ -8,7 +8,7 @@ import com.tekion.commons.service.BaseService;
 import lombok.NonNull;
 
 public interface BasePostgresService<E extends BasePostgresEntity, D extends BasePostgresDomain>
-        extends BaseService<E, D, Long> {
+        extends BaseService<E, D, String> {
 
     PageResponse<D> getAllPaginated(@NonNull PageRequest pageRequest);
 }
