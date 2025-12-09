@@ -10,14 +10,16 @@ import org.jooq.DSLContext;
 import org.jooq.Table;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class AssetUserPermissionMappingRepoImpl extends BasePostgresRepoImpl<AssetUserPermissionMappingRecord, AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain> implements AssetUserPermissionMappingRepo {
+import java.util.UUID;
 
-    private final BasePostgresMapper<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain> mapper;
+@Repository
+public class AssetUserPermissionMappingRepoImpl extends BasePostgresRepoImpl<AssetUserPermissionMappingRecord, AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, String> implements AssetUserPermissionMappingRepo {
+
+    private final BasePostgresMapper<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, String> mapper;
     private final DSLContext dslContext;
 
     public AssetUserPermissionMappingRepoImpl(
-            BasePostgresMapper<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain> mapper,
+            BasePostgresMapper<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, String> mapper,
             DSLContext dslContext) {
         super(mapper, AssetUserPermissionMappingEntity.class);
         this.mapper = mapper;
@@ -32,5 +34,10 @@ public class AssetUserPermissionMappingRepoImpl extends BasePostgresRepoImpl<Ass
     @Override
     protected Table<AssetUserPermissionMappingRecord> getTable() {
         return AssetUserPermissionMapping.ASSET_USER_PERMISSION_MAPPING;
+    }
+
+    @Override
+    protected String generateId() {
+        return UUID.randomUUID().toString();
     }
 }

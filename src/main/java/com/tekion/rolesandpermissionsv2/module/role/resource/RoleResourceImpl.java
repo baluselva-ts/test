@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/role")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Role", description = "Role APIs")
-public class RoleResourceImpl extends BasePostgresResourceImpl<RoleEntity, RoleDomain>
+public class RoleResourceImpl extends BasePostgresResourceImpl<RoleEntity, RoleDomain, String>
         implements RoleResource {
 
     RoleService service;

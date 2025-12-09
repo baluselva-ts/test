@@ -10,7 +10,7 @@ import com.tekion.rolesandpermissionsv2.module.permission.repo.DepartmentRepo;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DepartmentServiceImpl extends BasePostgresServiceImpl<DepartmentEntity, DepartmentDomain>
+public class DepartmentServiceImpl extends BasePostgresServiceImpl<DepartmentEntity, DepartmentDomain, String>
         implements DepartmentService {
 
     private final DepartmentRepo repository;

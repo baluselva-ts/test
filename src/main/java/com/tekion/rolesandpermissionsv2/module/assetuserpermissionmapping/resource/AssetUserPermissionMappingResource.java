@@ -4,7 +4,7 @@ import com.tekion.arorapostgres.resource.BasePostgresResource;
 import com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.domain.AssetUserPermissionMappingDomain;
 import com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.entity.AssetUserPermissionMappingEntity;
 
-public interface AssetUserPermissionMappingResource extends BasePostgresResource<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain> {
+public interface AssetUserPermissionMappingResource extends BasePostgresResource<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, String> {
 
 }
 

@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class UserRoleMappingEntity extends BasePostgresEntity {
+public class UserRoleMappingEntity extends BasePostgresEntity<String> {
 
     private String userId;
     private String primaryRoleId;

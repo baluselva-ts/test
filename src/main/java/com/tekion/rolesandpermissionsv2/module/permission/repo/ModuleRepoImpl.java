@@ -10,14 +10,16 @@ import org.jooq.DSLContext;
 import org.jooq.Table;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class ModuleRepoImpl extends BasePostgresRepoImpl<ModuleRecord, ModuleEntity, ModuleDomain> implements ModuleRepo {
+import java.util.UUID;
 
-    private final BasePostgresMapper<ModuleEntity, ModuleDomain> mapper;
+@Repository
+public class ModuleRepoImpl extends BasePostgresRepoImpl<ModuleRecord, ModuleEntity, ModuleDomain, String> implements ModuleRepo {
+
+    private final BasePostgresMapper<ModuleEntity, ModuleDomain, String> mapper;
     private final DSLContext dslContext;
 
     public ModuleRepoImpl(
-            BasePostgresMapper<ModuleEntity, ModuleDomain> mapper,
+            BasePostgresMapper<ModuleEntity, ModuleDomain, String> mapper,
             DSLContext dslContext) {
         super(mapper, ModuleEntity.class);
         this.mapper = mapper;
@@ -32,5 +34,10 @@ public class ModuleRepoImpl extends BasePostgresRepoImpl<ModuleRecord, ModuleEnt
     @Override
     protected Table<ModuleRecord> getTable() {
         return Module.MODULE;
+    }
+
+    @Override
+    protected String generateId() {
+        return UUID.randomUUID().toString();
     }
 }

@@ -7,7 +7,7 @@ import com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.repo.A
 import org.springframework.stereotype.Service;
 
 @Service
-public class AssetUserPermissionMappingServiceImpl extends BasePostgresServiceImpl<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain>
+public class AssetUserPermissionMappingServiceImpl extends BasePostgresServiceImpl<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, String>
         implements AssetUserPermissionMappingService {
 
     private final AssetUserPermissionMappingRepo repository;

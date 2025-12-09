@@ -7,7 +7,7 @@ import com.tekion.rolesandpermissionsv2.module.role.repo.RolePermissionMappingRe
 import org.springframework.stereotype.Service;
 
 @Service
-public class RolePermissionMappingServiceImpl extends BasePostgresServiceImpl<RolePermissionMappingEntity, RolePermissionMappingDomain>
+public class RolePermissionMappingServiceImpl extends BasePostgresServiceImpl<RolePermissionMappingEntity, RolePermissionMappingDomain, String>
         implements RolePermissionMappingService {
 
     private final RolePermissionMappingRepo repository;

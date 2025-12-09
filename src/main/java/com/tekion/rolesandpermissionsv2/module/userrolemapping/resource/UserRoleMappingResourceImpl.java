@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/user-role-mapping")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "UserRoleMapping", description = "UserRoleMapping APIs")
-public class UserRoleMappingResourceImpl extends BasePostgresResourceImpl<UserRoleMappingEntity, UserRoleMappingDomain>
+public class UserRoleMappingResourceImpl extends BasePostgresResourceImpl<UserRoleMappingEntity, UserRoleMappingDomain, String>
         implements UserRoleMappingResource {
 
     UserRoleMappingService service;

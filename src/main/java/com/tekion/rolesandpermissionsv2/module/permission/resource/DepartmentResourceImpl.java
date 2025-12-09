@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/permission-department")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Permission Department", description = "Permission Department APIs")
-public class DepartmentResourceImpl extends BasePostgresResourceImpl<DepartmentEntity, DepartmentDomain>
+public class DepartmentResourceImpl extends BasePostgresResourceImpl<DepartmentEntity, DepartmentDomain, String>
         implements DepartmentResource {
 
     DepartmentService service;

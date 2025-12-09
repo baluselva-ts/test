@@ -10,6 +10,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-public interface RoleMapper extends BasePostgresMapper<RoleEntity, RoleDomain> {
+public interface RoleMapper extends BasePostgresMapper<RoleEntity, RoleDomain, String> {
 
 }

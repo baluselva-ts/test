@@ -18,16 +18,16 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E extends BasePostgresEntity, D extends BasePostgresDomain> extends BaseRepoImpl<E, D, String>
-        implements BasePostgresRepo<E, D> {
+public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E extends BasePostgresEntity<ID>, D extends BasePostgresDomain, ID> extends BaseRepoImpl<E, D, ID>
+        implements BasePostgresRepo<E, D, ID> {
 
-    protected final BasePostgresMapper<E, D> mapper;
+    protected final BasePostgresMapper<E, D, ID> mapper;
     protected final Class<E> entityClass;
     private TableField<R, Boolean> isDeletedField;
-    private TableField<R, String> idField;
+    private TableField<R, ID> idField;
     private TableField<R, String> scopeIdField;
 
-    protected BasePostgresRepoImpl(BasePostgresMapper<E, D> mapper, Class<E> entityClass) {
+    protected BasePostgresRepoImpl(BasePostgresMapper<E, D, ID> mapper, Class<E> entityClass) {
         super();
         this.mapper = mapper;
         this.entityClass = entityClass;
@@ -37,7 +37,9 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
 
     protected abstract Table<R> getTable();
 
-    protected TableField<R, String> getIdField() {
+    protected abstract ID generateId();
+
+    protected TableField<R, ID> getIdField() {
         if (idField == null) {
             this.idField = resolveRequiredField("id");
         }
@@ -73,7 +75,7 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
 
     protected void setCreateFields(E entity) {
         if (entity.getId() == null) {
-            entity.setId(java.util.UUID.randomUUID().toString());
+            entity.setId(generateId());
         }
         Instant now = Instant.now();
         entity.setScopeId(TekionContextProvider.getCurrentScopeId());
@@ -110,7 +112,7 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
 	    }
 
     @Override
-    public D getById(@NonNull String id) {
+    public D getById(@NonNull ID id) {
         R updatableRecord = getDsl().selectFrom(getTable()).where(enrichCondition(getIdField().eq(id))).fetchOne();
 
         if (updatableRecord == null) {
@@ -122,7 +124,7 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
     }
 
     @Override
-    public List<D> getByIds(@NonNull List<String> idList) {
+    public List<D> getByIds(@NonNull List<ID> idList) {
         if (idList.isEmpty()) {
             return List.of();
         }
@@ -173,7 +175,7 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
 	    }
 
     @Override
-    public D deleteById(@NonNull String id) {
+    public D deleteById(@NonNull ID id) {
         R deleted = getDsl().update(getTable()).set(getIsDeletedField(), Boolean.TRUE).where(getIdField().eq(id)).returning().fetchOne();
 
         if (deleted == null) {
@@ -185,7 +187,7 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
     }
 
     @Override
-    public List<D> deleteByIdBulk(@NonNull List<String> idList) {
+    public List<D> deleteByIdBulk(@NonNull List<ID> idList) {
         if (idList.isEmpty()) {
             return List.of();
         }
@@ -215,12 +217,10 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
 
         String lastId = decodeCursor(pageRequest.getCursor());
 
-        TableField<R, String> sortField = null;
+        TableField<R, ?> sortField = null;
         Field<?> field = getTable().field(pageRequest.getSortBy());
         if (field instanceof TableField) {
-            @SuppressWarnings("unchecked")
-            TableField<R, String> tempField = (TableField<R, String>) field;
-            sortField = tempField;
+            sortField = (TableField<R, ?>) field;
         }
         if (sortField == null) {
             sortField = getIdField();
@@ -228,14 +228,16 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
 
         Condition condition = enrichCondition(null);
         if (lastId != null) {
+            @SuppressWarnings("unchecked")
+            TableField<R, String> stringField = (TableField<R, String>) sortField;
             if ("DESC".equalsIgnoreCase(pageRequest.getSortDirection())) {
-                condition = condition.and(sortField.lt(lastId));
+                condition = condition.and(stringField.lt(lastId));
             } else {
-                condition = condition.and(sortField.gt(lastId));
+                condition = condition.and(stringField.gt(lastId));
             }
         }
 
-        SortField<String> orderBy = "DESC".equalsIgnoreCase(pageRequest.getSortDirection()) ? sortField.desc() : sortField.asc();
+        SortField<?> orderBy = "DESC".equalsIgnoreCase(pageRequest.getSortDirection()) ? sortField.desc() : sortField.asc();
 
         int limit = pageRequest.getPageSize() + 1; // Fetch one extra to detect next page
 
@@ -252,7 +254,9 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
 
 	        String nextCursor = null;
 	        if (hasNext && !records.isEmpty()) {
-	            String nextId = records.get(records.size() - 1).get(sortField);
+	            @SuppressWarnings("unchecked")
+	            TableField<R, String> stringField = (TableField<R, String>) sortField;
+	            String nextId = records.get(records.size() - 1).get(stringField);
 	            nextCursor = encodeCursor(nextId);
 	        }
 

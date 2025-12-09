@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/persona")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Persona", description = "Persona APIs")
-public class PersonaResourceImpl extends BasePostgresResourceImpl<PersonaEntity, PersonaDomain>
+public class PersonaResourceImpl extends BasePostgresResourceImpl<PersonaEntity, PersonaDomain, String>
         implements PersonaResource {
 
     PersonaService service;

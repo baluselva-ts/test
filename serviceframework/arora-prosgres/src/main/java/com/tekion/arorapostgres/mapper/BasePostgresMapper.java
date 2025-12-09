@@ -4,7 +4,7 @@ import com.tekion.arorapostgres.domain.BasePostgresDomain;
 import com.tekion.arorapostgres.entity.BasePostgresEntity;
 import com.tekion.commons.mapper.BaseMapper;
 
-public interface BasePostgresMapper<E extends BasePostgresEntity, D extends BasePostgresDomain>
+public interface BasePostgresMapper<E extends BasePostgresEntity<ID>, D extends BasePostgresDomain, ID>
         extends BaseMapper<E, D> {
 
     default String toString(Long id) {

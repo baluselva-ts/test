@@ -10,7 +10,7 @@ import com.tekion.rolesandpermissionsv2.module.persona.repo.PersonaRepo;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PersonaServiceImpl extends BasePostgresServiceImpl<PersonaEntity, PersonaDomain>
+public class PersonaServiceImpl extends BasePostgresServiceImpl<PersonaEntity, PersonaDomain, String>
         implements PersonaService {
 
     private final PersonaRepo repository;

@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class DepartmentEntity extends BasePostgresEntity {
+public class DepartmentEntity extends BasePostgresEntity<String> {
 
     @Override
     public String getAuditAssetType() {

@@ -11,6 +11,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-public interface AssetUserPermissionMapper extends BasePostgresMapper<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain> {
+public interface AssetUserPermissionMapper extends BasePostgresMapper<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, String> {
 
 }

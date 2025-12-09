@@ -6,6 +6,6 @@ import com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.entity
 import com.tekion.rolesandpermissionsv2.module.permission.domain.PermissionDomain;
 import com.tekion.rolesandpermissionsv2.module.permission.entity.PermissionEntity;
 
-public interface PermissionRepo extends BasePostgresRepo<PermissionEntity, PermissionDomain> {
+public interface PermissionRepo extends BasePostgresRepo<PermissionEntity, PermissionDomain, String> {
 
 }

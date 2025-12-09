@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/permission-module")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Permission Module", description = "Permission Module APIs")
-public class ModuleResourceImpl extends BasePostgresResourceImpl<ModuleEntity, ModuleDomain>
+public class ModuleResourceImpl extends BasePostgresResourceImpl<ModuleEntity, ModuleDomain, String>
         implements ModuleResource {
 
     ModuleService service;

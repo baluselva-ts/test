@@ -14,14 +14,16 @@ import org.jooq.DSLContext;
 import org.jooq.Table;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class PersonaPermissionMappingRepoImpl extends BasePostgresRepoImpl<PersonaPermissionMappingRecord, PersonaPermissionMappingEntity, PersonaPermissionMappingDomain> implements PersonaPermissionMappingRepo {
+import java.util.UUID;
 
-    private final BasePostgresMapper<PersonaPermissionMappingEntity, PersonaPermissionMappingDomain> mapper;
+@Repository
+public class PersonaPermissionMappingRepoImpl extends BasePostgresRepoImpl<PersonaPermissionMappingRecord, PersonaPermissionMappingEntity, PersonaPermissionMappingDomain, String> implements PersonaPermissionMappingRepo {
+
+    private final BasePostgresMapper<PersonaPermissionMappingEntity, PersonaPermissionMappingDomain, String> mapper;
     private final DSLContext dslContext;
 
     public PersonaPermissionMappingRepoImpl(
-            BasePostgresMapper<PersonaPermissionMappingEntity, PersonaPermissionMappingDomain> mapper,
+            BasePostgresMapper<PersonaPermissionMappingEntity, PersonaPermissionMappingDomain, String> mapper,
             DSLContext dslContext) {
         super(mapper, PersonaPermissionMappingEntity.class);
         this.mapper = mapper;
@@ -36,5 +38,10 @@ public class PersonaPermissionMappingRepoImpl extends BasePostgresRepoImpl<Perso
     @Override
     protected Table<PersonaPermissionMappingRecord> getTable() {
         return PersonaPermissionMapping.PERSONA_PERMISSION_MAPPING;
+    }
+
+    @Override
+    protected String generateId() {
+        return UUID.randomUUID().toString();
     }
 }

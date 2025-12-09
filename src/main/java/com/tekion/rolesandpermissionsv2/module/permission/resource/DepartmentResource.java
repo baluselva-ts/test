@@ -6,7 +6,7 @@ import com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.entity
 import com.tekion.rolesandpermissionsv2.module.permission.domain.DepartmentDomain;
 import com.tekion.rolesandpermissionsv2.module.permission.entity.DepartmentEntity;
 
-public interface DepartmentResource extends BasePostgresResource<DepartmentEntity, DepartmentDomain> {
+public interface DepartmentResource extends BasePostgresResource<DepartmentEntity, DepartmentDomain, String> {
 
 }
 

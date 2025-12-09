@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/persona-permission-mapping")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Persona Permission Mapping", description = "Persona Permission Mapping APIs")
-public class PersonaPermissionMappingResourceImpl extends BasePostgresResourceImpl<PersonaPermissionMappingEntity, PersonaPermissionMappingDomain>
+public class PersonaPermissionMappingResourceImpl extends BasePostgresResourceImpl<PersonaPermissionMappingEntity, PersonaPermissionMappingDomain, String>
         implements PersonaPermissionMappingResource {
 
     PersonaPermissionMappingService service;

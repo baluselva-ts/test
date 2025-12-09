@@ -7,7 +7,7 @@ import com.tekion.rolesandpermissionsv2.module.userrolemapping.repo.UserRoleMapp
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserRoleMappingServiceImpl extends BasePostgresServiceImpl<UserRoleMappingEntity, UserRoleMappingDomain>
+public class UserRoleMappingServiceImpl extends BasePostgresServiceImpl<UserRoleMappingEntity, UserRoleMappingDomain, String>
         implements UserRoleMappingService {
 
     private final UserRoleMappingRepo repository;

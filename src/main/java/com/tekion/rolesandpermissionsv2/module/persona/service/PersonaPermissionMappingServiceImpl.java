@@ -7,7 +7,7 @@ import com.tekion.rolesandpermissionsv2.module.persona.repo.PersonaPermissionMap
 import org.springframework.stereotype.Service;
 
 @Service
-public class PersonaPermissionMappingServiceImpl extends BasePostgresServiceImpl<PersonaPermissionMappingEntity, PersonaPermissionMappingDomain>
+public class PersonaPermissionMappingServiceImpl extends BasePostgresServiceImpl<PersonaPermissionMappingEntity, PersonaPermissionMappingDomain, String>
         implements PersonaPermissionMappingService {
 
     private final PersonaPermissionMappingRepo repository;

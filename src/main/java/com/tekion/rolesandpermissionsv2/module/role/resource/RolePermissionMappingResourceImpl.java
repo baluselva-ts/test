@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/role-permission-mapping")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "RolePermissionMapping", description = "RolePermissionMapping APIs")
-public class RolePermissionMappingResourceImpl extends BasePostgresResourceImpl<RolePermissionMappingEntity, RolePermissionMappingDomain>
+public class RolePermissionMappingResourceImpl extends BasePostgresResourceImpl<RolePermissionMappingEntity, RolePermissionMappingDomain, String>
         implements RolePermissionMappingResource {
 
     RolePermissionMappingService service;

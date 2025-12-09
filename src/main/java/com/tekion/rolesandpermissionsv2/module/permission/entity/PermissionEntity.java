@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PermissionEntity extends BasePostgresEntity {
+public class PermissionEntity extends BasePostgresEntity<String> {
 
     private String moduleId;
     private String departmentId;

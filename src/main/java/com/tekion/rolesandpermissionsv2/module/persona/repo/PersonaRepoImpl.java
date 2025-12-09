@@ -10,14 +10,16 @@ import org.jooq.DSLContext;
 import org.jooq.Table;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class PersonaRepoImpl extends BasePostgresRepoImpl<PersonaRecord, PersonaEntity, PersonaDomain> implements PersonaRepo {
+import java.util.UUID;
 
-    private final BasePostgresMapper<PersonaEntity, PersonaDomain> mapper;
+@Repository
+public class PersonaRepoImpl extends BasePostgresRepoImpl<PersonaRecord, PersonaEntity, PersonaDomain, String> implements PersonaRepo {
+
+    private final BasePostgresMapper<PersonaEntity, PersonaDomain, String> mapper;
     private final DSLContext dslContext;
 
     public PersonaRepoImpl(
-            BasePostgresMapper<PersonaEntity, PersonaDomain> mapper,
+            BasePostgresMapper<PersonaEntity, PersonaDomain, String> mapper,
             DSLContext dslContext) {
         super(mapper, PersonaEntity.class);
         this.mapper = mapper;
@@ -32,5 +34,10 @@ public class PersonaRepoImpl extends BasePostgresRepoImpl<PersonaRecord, Persona
     @Override
     protected Table<PersonaRecord> getTable() {
         return Persona.PERSONA;
+    }
+
+    @Override
+    protected String generateId() {
+        return UUID.randomUUID().toString();
     }
 }

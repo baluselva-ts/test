@@ -7,7 +7,7 @@ import com.tekion.rolesandpermissionsv2.module.permission.repo.ModuleRepo;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ModuleServiceImpl extends BasePostgresServiceImpl<ModuleEntity, ModuleDomain>
+public class ModuleServiceImpl extends BasePostgresServiceImpl<ModuleEntity, ModuleDomain, String>
         implements ModuleService {
 
     private final ModuleRepo repository;

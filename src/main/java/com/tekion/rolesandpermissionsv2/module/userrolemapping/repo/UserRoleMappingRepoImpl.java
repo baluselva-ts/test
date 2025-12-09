@@ -10,14 +10,16 @@ import org.jooq.DSLContext;
 import org.jooq.Table;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class UserRoleMappingRepoImpl extends BasePostgresRepoImpl<UserRoleMappingRecord, UserRoleMappingEntity, UserRoleMappingDomain> implements UserRoleMappingRepo {
+import java.util.UUID;
 
-    private final BasePostgresMapper<UserRoleMappingEntity, UserRoleMappingDomain> mapper;
+@Repository
+public class UserRoleMappingRepoImpl extends BasePostgresRepoImpl<UserRoleMappingRecord, UserRoleMappingEntity, UserRoleMappingDomain, String> implements UserRoleMappingRepo {
+
+    private final BasePostgresMapper<UserRoleMappingEntity, UserRoleMappingDomain, String> mapper;
     private final DSLContext dslContext;
 
     public UserRoleMappingRepoImpl(
-            BasePostgresMapper<UserRoleMappingEntity, UserRoleMappingDomain> mapper,
+            BasePostgresMapper<UserRoleMappingEntity, UserRoleMappingDomain, String> mapper,
             DSLContext dslContext) {
         super(mapper, UserRoleMappingEntity.class);
         this.mapper = mapper;
@@ -32,5 +34,10 @@ public class UserRoleMappingRepoImpl extends BasePostgresRepoImpl<UserRoleMappin
     @Override
     protected Table<UserRoleMappingRecord> getTable() {
         return UserRoleMapping.USER_ROLE_MAPPING;
+    }
+
+    @Override
+    protected String generateId() {
+        return UUID.randomUUID().toString();
     }
 }

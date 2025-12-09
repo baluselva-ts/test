@@ -13,14 +13,16 @@ import org.jooq.DSLContext;
 import org.jooq.Table;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class DepartmentRepoImpl extends BasePostgresRepoImpl<DepartmentRecord, DepartmentEntity, DepartmentDomain> implements DepartmentRepo {
+import java.util.UUID;
 
-    private final BasePostgresMapper<DepartmentEntity, DepartmentDomain> mapper;
+@Repository
+public class DepartmentRepoImpl extends BasePostgresRepoImpl<DepartmentRecord, DepartmentEntity, DepartmentDomain, String> implements DepartmentRepo {
+
+    private final BasePostgresMapper<DepartmentEntity, DepartmentDomain, String> mapper;
     private final DSLContext dslContext;
 
     public DepartmentRepoImpl(
-            BasePostgresMapper<DepartmentEntity, DepartmentDomain> mapper,
+            BasePostgresMapper<DepartmentEntity, DepartmentDomain, String> mapper,
             DSLContext dslContext) {
         super(mapper, DepartmentEntity.class);
         this.mapper = mapper;
@@ -35,5 +37,10 @@ public class DepartmentRepoImpl extends BasePostgresRepoImpl<DepartmentRecord, D
     @Override
     protected Table<DepartmentRecord> getTable() {
         return Department.DEPARTMENT;
+    }
+
+    @Override
+    protected String generateId() {
+        return UUID.randomUUID().toString();
     }
 }
