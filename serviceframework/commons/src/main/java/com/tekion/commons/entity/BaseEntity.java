@@ -25,6 +25,10 @@ public abstract class BaseEntity<ID> {
     String name;
     String label;
     String scopeId;
+    String tenantId;
+    String dealerId;
+    String oemId;
+    String programId;
     @Builder.Default
     Boolean isDeleted = false;
     @Builder.Default

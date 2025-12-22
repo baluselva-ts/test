@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E extends BasePostgresEntity<ID>, D extends BasePostgresDomain, ID> extends BaseRepoImpl<E, D, ID>
@@ -26,14 +27,22 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
     private TableField<R, Boolean> isDeletedField;
     private TableField<R, ID> idField;
     private TableField<R, String> scopeIdField;
+    private String moduleName;
+    private final DSLFactory dslFactory;
+    private final Map<String, String> clusterTypeRepoLevelMap;
 
-    protected BasePostgresRepoImpl(BasePostgresMapper<E, D, ID> mapper, Class<E> entityClass) {
+    protected BasePostgresRepoImpl(BasePostgresMapper<E, D, ID> mapper, Class<E> entityClass, String moduleName, DSLFactory dslFactory, Map<String, String> clusterTypeRepoLevelMap) {
         super();
         this.mapper = mapper;
         this.entityClass = entityClass;
+        this.moduleName = moduleName;
+        this.dslFactory = dslFactory;
+        this.clusterTypeRepoLevelMap = clusterTypeRepoLevelMap;
     }
 
-    protected abstract DSLContext getDsl();
+    protected DSLContext getDsl() {
+        return dslFactory.getDslContextForModule(moduleName, clusterTypeRepoLevelMap.get(TekionContextProvider.getClusterType()));
+    }
 
     protected abstract Table<R> getTable();
 

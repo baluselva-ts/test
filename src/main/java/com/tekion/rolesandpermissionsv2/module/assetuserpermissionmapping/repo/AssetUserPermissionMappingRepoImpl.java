@@ -2,33 +2,30 @@ package com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.repo;
 
 import com.tekion.arorapostgres.mapper.BasePostgresMapper;
 import com.tekion.arorapostgres.repo.BasePostgresRepoImpl;
+import com.tekion.arorapostgres.repo.DSLFactory;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.AssetUserPermissionMapping;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.records.AssetUserPermissionMappingRecord;
 import com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.domain.AssetUserPermissionMappingDomain;
 import com.tekion.rolesandpermissionsv2.module.assetuserpermissionmapping.entity.AssetUserPermissionMappingEntity;
-import org.jooq.DSLContext;
 import org.jooq.Table;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Repository
-public class AssetUserPermissionMappingRepoImpl extends BasePostgresRepoImpl<AssetUserPermissionMappingRecord, AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, String> implements AssetUserPermissionMappingRepo {
+public class AssetUserPermissionMappingRepoImpl extends BasePostgresRepoImpl<AssetUserPermissionMappingRecord, AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, String>
+        implements AssetUserPermissionMappingRepo {
 
     private final BasePostgresMapper<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, String> mapper;
-    private final DSLContext dslContext;
+    private final DSLFactory dslFactory;
 
     public AssetUserPermissionMappingRepoImpl(
-            BasePostgresMapper<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, String> mapper,
-            DSLContext dslContext) {
-        super(mapper, AssetUserPermissionMappingEntity.class);
+            BasePostgresMapper<AssetUserPermissionMappingEntity, AssetUserPermissionMappingDomain, String> mapper, DSLFactory dslFactory) {
+        super(mapper, AssetUserPermissionMappingEntity.class, "", dslFactory, Map.of("ARC", "tenant", "OEM", "oem"));
         this.mapper = mapper;
-        this.dslContext = dslContext;
-    }
-
-    @Override
-    protected DSLContext getDsl() {
-        return dslContext;
+        this.dslFactory = dslFactory;
     }
 
     @Override

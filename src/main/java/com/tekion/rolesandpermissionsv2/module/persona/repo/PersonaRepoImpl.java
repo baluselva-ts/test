@@ -2,11 +2,11 @@ package com.tekion.rolesandpermissionsv2.module.persona.repo;
 
 import com.tekion.arorapostgres.mapper.BasePostgresMapper;
 import com.tekion.arorapostgres.repo.BasePostgresRepoImpl;
+import com.tekion.arorapostgres.repo.DSLFactory;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.Persona;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.records.PersonaRecord;
 import com.tekion.rolesandpermissionsv2.module.persona.domain.PersonaDomain;
 import com.tekion.rolesandpermissionsv2.module.persona.entity.PersonaEntity;
-import org.jooq.DSLContext;
 import org.jooq.Table;
 import org.springframework.stereotype.Repository;
 
@@ -16,19 +16,11 @@ import java.util.UUID;
 public class PersonaRepoImpl extends BasePostgresRepoImpl<PersonaRecord, PersonaEntity, PersonaDomain, String> implements PersonaRepo {
 
     private final BasePostgresMapper<PersonaEntity, PersonaDomain, String> mapper;
-    private final DSLContext dslContext;
 
     public PersonaRepoImpl(
-            BasePostgresMapper<PersonaEntity, PersonaDomain, String> mapper,
-            DSLContext dslContext) {
-        super(mapper, PersonaEntity.class);
+            BasePostgresMapper<PersonaEntity, PersonaDomain, String> mapper, DSLFactory dslFactory) {
+        super(mapper, PersonaEntity.class, "", dslFactory, null);
         this.mapper = mapper;
-        this.dslContext = dslContext;
-    }
-
-    @Override
-    protected DSLContext getDsl() {
-        return dslContext;
     }
 
     @Override

@@ -39,7 +39,16 @@ repositories {
 
 		    // Jackson annotations (for JsonInclude, etc.)
 		    implementation("com.fasterxml.jackson.core:jackson-annotations:2.13.5")
-		
+
+		    // Spring Framework (for @Service, @Component, etc.)
+		    implementation("org.springframework:spring-context:5.3.31")
+
+		    // SLF4J (for @Slf4j annotation)
+		    implementation("org.slf4j:slf4j-api:1.7.36")
+
+		    // Guava (for Cache)
+		    implementation("com.google.guava:guava:31.1-jre")
+
 		    // Commons module dependency
 		    implementation(project(":serviceframework:commons"))
 	}
