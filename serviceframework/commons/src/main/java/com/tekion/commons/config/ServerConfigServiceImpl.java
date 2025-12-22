@@ -1,4 +1,4 @@
-package com.tekion.arorapostgres.repo;
+package com.tekion.commons.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +28,7 @@ public class ServerConfigServiceImpl implements ServerConfigService {
         log.debug("Finding server config for serverType: {}, module: {}, tenant: {}, dealer: {}",
                 serverType, moduleName, tenantId, dealerId);
 
-        ServerConfigFlat config = ServerConfigFlat.builder()
+        return ServerConfigFlat.builder()
                 .serverType(serverType)
                 .moduleName(moduleName)
                 .tenantId(tenantId)
@@ -40,8 +40,6 @@ public class ServerConfigServiceImpl implements ServerConfigService {
                 .minConnections(defaultMinConnections)
                 .isReadReplica(false)
                 .build();
-
-        return config;
     }
 
     private String buildJdbcUrl(String moduleName, String tenantId, String dealerId) {

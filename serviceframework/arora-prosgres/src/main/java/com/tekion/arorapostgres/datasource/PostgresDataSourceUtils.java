@@ -1,7 +1,7 @@
 package com.tekion.arorapostgres.datasource;
 
-import com.tekion.arorapostgres.repo.ServerConfigFlat;
-import com.tekion.arorapostgres.repo.ServerConfigService;
+import com.tekion.commons.config.ServerConfigFlat;
+import com.tekion.commons.config.ServerConfigService;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Builder;

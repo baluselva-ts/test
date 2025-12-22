@@ -1,4 +1,4 @@
-package com.tekion.arorapostgres.repo;
+package com.tekion.commons.config;
 
 import lombok.*;
 
@@ -26,3 +26,4 @@ public class ServerConfigFlat {
     private Integer maxConnections;
     private Integer minConnections;
 }
+

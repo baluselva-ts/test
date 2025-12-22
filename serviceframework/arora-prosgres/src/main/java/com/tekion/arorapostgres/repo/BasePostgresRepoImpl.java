@@ -2,6 +2,7 @@ package com.tekion.arorapostgres.repo;
 
 
 import com.tekion.arorapostgres.domain.BasePostgresDomain;
+import com.tekion.arorapostgres.dsl.DSLFactory;
 import com.tekion.arorapostgres.entity.BasePostgresEntity;
 import com.tekion.arorapostgres.mapper.BasePostgresMapper;
 import com.tekion.commons.commons.TekionContextProvider;
@@ -27,7 +28,7 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
     private TableField<R, Boolean> isDeletedField;
     private TableField<R, ID> idField;
     private TableField<R, String> scopeIdField;
-    private String moduleName;
+    private final String moduleName;
     private final DSLFactory dslFactory;
     private final Map<String, String> clusterTypeRepoLevelMap;
 

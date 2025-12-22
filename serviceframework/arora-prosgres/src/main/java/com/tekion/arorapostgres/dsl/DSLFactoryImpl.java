@@ -1,7 +1,8 @@
-package com.tekion.arorapostgres.repo;
+package com.tekion.arorapostgres.dsl;
 
 import com.tekion.arorapostgres.datasource.PostgresDataSourceUtils;
 import com.tekion.commons.commons.TekionContextProvider;
+import com.tekion.commons.config.ServerConfigService;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

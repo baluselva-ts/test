@@ -2,7 +2,7 @@ package com.tekion.rolesandpermissionsv2.module.permission.repo;
 
 import com.tekion.arorapostgres.mapper.BasePostgresMapper;
 import com.tekion.arorapostgres.repo.BasePostgresRepoImpl;
-import com.tekion.arorapostgres.repo.DSLFactory;
+import com.tekion.arorapostgres.dsl.DSLFactory;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.Department;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.records.DepartmentRecord;
 import com.tekion.rolesandpermissionsv2.module.permission.domain.DepartmentDomain;

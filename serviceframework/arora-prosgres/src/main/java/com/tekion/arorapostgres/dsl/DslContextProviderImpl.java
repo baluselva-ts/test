@@ -1,4 +1,4 @@
-package com.tekion.arorapostgres.repo;
+package com.tekion.arorapostgres.dsl;
 
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;

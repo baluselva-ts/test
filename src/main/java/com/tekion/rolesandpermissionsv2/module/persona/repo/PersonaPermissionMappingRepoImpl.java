@@ -2,7 +2,7 @@ package com.tekion.rolesandpermissionsv2.module.persona.repo;
 
 import com.tekion.arorapostgres.mapper.BasePostgresMapper;
 import com.tekion.arorapostgres.repo.BasePostgresRepoImpl;
-import com.tekion.arorapostgres.repo.DSLFactory;
+import com.tekion.arorapostgres.dsl.DSLFactory;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.PersonaPermissionMapping;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.records.PersonaPermissionMappingRecord;
 import com.tekion.rolesandpermissionsv2.module.persona.domain.PersonaPermissionMappingDomain;
