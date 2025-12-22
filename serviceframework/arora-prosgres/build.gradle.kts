@@ -43,11 +43,18 @@ repositories {
 		    // Spring Framework (for @Service, @Component, etc.)
 		    implementation("org.springframework:spring-context:5.3.31")
 
+		    // Spring Boot (for @ConditionalOnMissingBean, @Value, etc.)
+		    implementation("org.springframework.boot:spring-boot:2.7.18")
+		    implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.18")
+
 		    // SLF4J (for @Slf4j annotation)
 		    implementation("org.slf4j:slf4j-api:1.7.36")
 
 		    // Guava (for Cache)
 		    implementation("com.google.guava:guava:31.1-jre")
+
+		    // HikariCP (for connection pooling)
+		    implementation("com.zaxxer:HikariCP:5.0.1")
 
 		    // Commons module dependency
 		    implementation(project(":serviceframework:commons"))
