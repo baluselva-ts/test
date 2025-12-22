@@ -3,6 +3,7 @@ package com.tekion.rolesandpermissionsv2.module.permission.repo;
 import com.tekion.arorapostgres.mapper.BasePostgresMapper;
 import com.tekion.arorapostgres.repo.BasePostgresRepoImpl;
 import com.tekion.arorapostgres.dsl.DSLFactory;
+import com.tekion.rolesandpermissionsv2.config.RepoClusterConfig;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.Department;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.records.DepartmentRecord;
 import com.tekion.rolesandpermissionsv2.module.permission.domain.DepartmentDomain;
@@ -19,7 +20,7 @@ public class DepartmentRepoImpl extends BasePostgresRepoImpl<DepartmentRecord, D
 
     public DepartmentRepoImpl(
             BasePostgresMapper<DepartmentEntity, DepartmentDomain, String> mapper, DSLFactory dslFactory) {
-        super(mapper, DepartmentEntity.class, "", dslFactory, null);
+        super(mapper, DepartmentEntity.class, "", dslFactory, RepoClusterConfig.getDepartmentClusterMap());
         this.mapper = mapper;
     }
 

@@ -1,6 +1,7 @@
 package com.tekion.arorapostgres.repo;
 
 
+import com.tekion.arorapostgres.config.ClusterFieldConfig;
 import com.tekion.arorapostgres.domain.BasePostgresDomain;
 import com.tekion.arorapostgres.dsl.DSLFactory;
 import com.tekion.arorapostgres.entity.BasePostgresEntity;
@@ -27,7 +28,6 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
     protected final Class<E> entityClass;
     private TableField<R, Boolean> isDeletedField;
     private TableField<R, ID> idField;
-    private TableField<R, String> scopeIdField;
     private final String moduleName;
     private final DSLFactory dslFactory;
     private final Map<String, String> clusterTypeRepoLevelMap;
@@ -63,13 +63,6 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
         return isDeletedField;
     }
 
-    protected TableField<R, String> getScopeIdField() {
-        if (scopeIdField == null) {
-            this.scopeIdField = resolveRequiredField("scope_id");
-        }
-        return scopeIdField;
-    }
-
     private <T> TableField<R, T> resolveRequiredField(String name) {
         Field<?> field = getTable().field(name);
         if (field == null) {
@@ -88,13 +81,70 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
             entity.setId(generateId());
         }
         Instant now = Instant.now();
-        entity.setScopeId(TekionContextProvider.getCurrentScopeId());
+
+        setClusterFields(entity);
+
         entity.setIsDeleted(false);
         entity.setCreatedAt(now);
         entity.setCreatedBy(TekionContextProvider.getCurrentUserId());
         entity.setLastUpdatedAt(now);
         entity.setLastUpdatedBy(TekionContextProvider.getCurrentUserId());
         entity.setVersion(1L);
+    }
+
+    private void setClusterFields(E entity) {
+        String clusterType = TekionContextProvider.getClusterType();
+        if (clusterType == null) {
+            return;
+        }
+
+        String repoLevel = clusterTypeRepoLevelMap.get(clusterType);
+        if (repoLevel == null) {
+            return;
+        }
+
+        List<String> fieldsToSet = ClusterFieldConfig.getFieldsUpToLevel(clusterType, repoLevel);
+
+        for (String fieldName : fieldsToSet) {
+            String value = getClusterFieldValue(fieldName);
+            if (value != null) {
+                setEntityClusterField(entity, fieldName, value);
+            }
+        }
+    }
+
+    private String getClusterFieldValue(String fieldName) {
+        switch (fieldName) {
+            case "tenantId":
+                return TekionContextProvider.getTenantId();
+            case "dealerId":
+                return TekionContextProvider.getDealerId();
+            case "oemId":
+                return TekionContextProvider.getOemId();
+            case "programId":
+                return TekionContextProvider.getProgramId();
+            default:
+                return null;
+        }
+    }
+
+    private void setEntityClusterField(E entity, String fieldName, String value) {
+        switch (fieldName) {
+            case "tenantId":
+                entity.setTenantId(value);
+                break;
+            case "dealerId":
+                entity.setDealerId(value);
+                break;
+            case "oemId":
+                entity.setOemId(value);
+                break;
+            case "programId":
+                entity.setProgramId(value);
+                break;
+            default:
+                break;
+        }
     }
 
     protected void setUpdateFields(E entity) {
@@ -274,7 +324,7 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
     }
 
     protected Condition enrichCondition(Condition baseCondition) {
-        Condition condition = notDeletedCondition().and(scopeIdCondition());
+        Condition condition = notDeletedCondition().and(clusterCondition(baseCondition));
         if (baseCondition != null) {
             condition = condition.and(baseCondition);
         }
@@ -285,12 +335,44 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
         return getIsDeletedField().isNull().or(getIsDeletedField().eq(Boolean.FALSE));
     }
 
-    protected Condition scopeIdCondition() {
-        String currentScopeId = TekionContextProvider.getCurrentScopeId();
-        if (currentScopeId == null || currentScopeId.isBlank()) {
+    protected Condition clusterCondition(Condition baseCondition) {
+        String clusterType = TekionContextProvider.getClusterType();
+        if (clusterType == null) {
             return DSL.noCondition();
         }
-        return getScopeIdField().eq(currentScopeId);
+
+        String repoLevel = clusterTypeRepoLevelMap.get(clusterType);
+        if (repoLevel == null) {
+            return DSL.noCondition();
+        }
+
+        List<String> fieldsForCondition = ClusterFieldConfig.getFieldsUpToLevel(clusterType, repoLevel);
+        if (fieldsForCondition.isEmpty()) {
+            return DSL.noCondition();
+        }
+
+        Condition condition = DSL.noCondition();
+
+        for (String fieldName : fieldsForCondition) {
+
+            String value = getClusterFieldValue(fieldName);
+            if (conditionContainsField(baseCondition, fieldName) || value == null || value.isBlank()) {
+                continue;
+            }
+
+            TableField<R, String> tableField = resolveRequiredField(fieldName);
+            condition = condition.and(tableField.eq(value));
+        }
+
+        return condition;
+    }
+
+    private boolean conditionContainsField(Condition condition, String fieldName) {
+        if (condition == null) {
+            return false;
+        }
+        String conditionSql = condition.toString().toLowerCase();
+        return conditionSql.contains(fieldName.toLowerCase());
     }
 
     private String encodeCursor(String id) {

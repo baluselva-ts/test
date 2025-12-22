@@ -3,6 +3,7 @@ package com.tekion.rolesandpermissionsv2.module.role.repo;
 import com.tekion.arorapostgres.mapper.BasePostgresMapper;
 import com.tekion.arorapostgres.repo.BasePostgresRepoImpl;
 import com.tekion.arorapostgres.dsl.DSLFactory;
+import com.tekion.rolesandpermissionsv2.config.RepoClusterConfig;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.Role;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.records.RoleRecord;
 import com.tekion.rolesandpermissionsv2.module.role.domain.RoleDomain;
@@ -19,7 +20,7 @@ public class RoleRepoImpl extends BasePostgresRepoImpl<RoleRecord, RoleEntity, R
 
     public RoleRepoImpl(
             BasePostgresMapper<RoleEntity, RoleDomain, String> mapper, DSLFactory dslFactory) {
-        super(mapper, RoleEntity.class, "", dslFactory, null);
+        super(mapper, RoleEntity.class, "", dslFactory, RepoClusterConfig.getRoleClusterMap());
         this.mapper = mapper;
     }
 

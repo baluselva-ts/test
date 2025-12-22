@@ -3,6 +3,7 @@ package com.tekion.rolesandpermissionsv2.module.persona.repo;
 import com.tekion.arorapostgres.mapper.BasePostgresMapper;
 import com.tekion.arorapostgres.repo.BasePostgresRepoImpl;
 import com.tekion.arorapostgres.dsl.DSLFactory;
+import com.tekion.rolesandpermissionsv2.config.RepoClusterConfig;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.Persona;
 import com.tekion.rolesandpermissionsv2.jooq.generated.tables.records.PersonaRecord;
 import com.tekion.rolesandpermissionsv2.module.persona.domain.PersonaDomain;
@@ -19,7 +20,7 @@ public class PersonaRepoImpl extends BasePostgresRepoImpl<PersonaRecord, Persona
 
     public PersonaRepoImpl(
             BasePostgresMapper<PersonaEntity, PersonaDomain, String> mapper, DSLFactory dslFactory) {
-        super(mapper, PersonaEntity.class, "", dslFactory, null);
+        super(mapper, PersonaEntity.class, "", dslFactory, RepoClusterConfig.getPersonaClusterMap());
         this.mapper = mapper;
     }
 
