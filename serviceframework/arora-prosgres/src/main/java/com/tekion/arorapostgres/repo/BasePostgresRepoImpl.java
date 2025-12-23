@@ -6,6 +6,7 @@ import com.tekion.arorapostgres.domain.BasePostgresDomain;
 import com.tekion.arorapostgres.dsl.DSLFactory;
 import com.tekion.arorapostgres.entity.BasePostgresEntity;
 import com.tekion.arorapostgres.mapper.BasePostgresMapper;
+import com.tekion.arorapostgres.transaction.PostgresTransactionManager;
 import com.tekion.commons.commons.TekionContextProvider;
 import com.tekion.commons.repo.BaseRepoImpl;
 import com.tekion.commons.request.PageRequest;
@@ -42,6 +43,14 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
     }
 
     protected DSLContext getDsl() {
+        DSLContext threadLocalTx = PostgresTransactionManager.getCurrentTransaction();
+        if (threadLocalTx != null) {
+            return threadLocalTx;
+        }
+        return dslFactory.getDslContextForModule(moduleName, clusterTypeRepoLevelMap.get(TekionContextProvider.getClusterType()));
+    }
+
+    public DSLContext getDefaultDslContext() {
         return dslFactory.getDslContextForModule(moduleName, clusterTypeRepoLevelMap.get(TekionContextProvider.getClusterType()));
     }
 
@@ -158,7 +167,8 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
         E entity = mapper.toFirst(domain);
         setCreateFields(entity);
 
-        R updatableRecord = getDsl().newRecord(getTable());
+        DSLContext dsl = getDsl();
+        R updatableRecord = dsl.newRecord(getTable());
         updatableRecord.from(entity);
         updatableRecord.insert();
 
@@ -166,14 +176,15 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
         return mapper.toSecond(persisted);
     }
 
-	    @Override
-	    public List<D> createBulk(@NonNull List<D> domainList) {
-	        return domainList.stream().map(this::create).collect(java.util.stream.Collectors.toList());
-	    }
+    @Override
+    public List<D> createBulk(@NonNull List<D> domainList) {
+        return domainList.stream().map(this::create).collect(java.util.stream.Collectors.toList());
+    }
 
     @Override
     public D getById(@NonNull ID id) {
-        R updatableRecord = getDsl().selectFrom(getTable()).where(enrichCondition(getIdField().eq(id))).fetchOne();
+        DSLContext dsl = getDsl();
+        R updatableRecord = dsl.selectFrom(getTable()).where(enrichCondition(getIdField().eq(id))).fetchOne();
 
         if (updatableRecord == null) {
             return null;
@@ -189,14 +200,16 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
             return List.of();
         }
 
-        List<E> entities = getDsl().selectFrom(getTable()).where(enrichCondition(getIdField().in(idList))).fetch().into(entityClass);
+        DSLContext dsl = getDsl();
+        List<E> entities = dsl.selectFrom(getTable()).where(enrichCondition(getIdField().in(idList))).fetch().into(entityClass);
 
         return mapper.toSecond(entities);
     }
 
     @Override
     public List<D> getAll() {
-        List<E> entities = getDsl().selectFrom(getTable()).where(enrichCondition(null)).fetch().into(entityClass);
+        DSLContext dsl = getDsl();
+        List<E> entities = dsl.selectFrom(getTable()).where(enrichCondition(null)).fetch().into(entityClass);
 
         return mapper.toSecond(entities);
     }
@@ -209,16 +222,17 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
             return create(domain);
         }
 
+        DSLContext dsl = getDsl();
         setUpdateFields(entity);
-        R updatableRecord = getDsl().newRecord(getTable());
+        R updatableRecord = dsl.newRecord(getTable());
         updatableRecord.from(entity);
         updatableRecord.changed(getIdField(), false);
 
-        R updated = getDsl().update(getTable()).set(updatableRecord).where(getIdField().eq(entity.getId())).returning().fetchOne();
+        R updated = dsl.update(getTable()).set(updatableRecord).where(getIdField().eq(entity.getId())).returning().fetchOne();
 
         if (updated == null) {
             setCreateFields(entity);
-            R inserted = getDsl().newRecord(getTable());
+            R inserted = dsl.newRecord(getTable());
             inserted.from(entity);
             inserted.insert();
             E insertedEntity = inserted.into(entityClass);
@@ -229,14 +243,15 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
         return mapper.toSecond(updatedEntity);
     }
 
-	    @Override
-	    public List<D> upsertBulk(@NonNull List<D> domainList) {
-	        return domainList.stream().map(this::upsert).collect(java.util.stream.Collectors.toList());
-	    }
+    @Override
+    public List<D> upsertBulk(@NonNull List<D> domainList) {
+        return domainList.stream().map(this::upsert).collect(java.util.stream.Collectors.toList());
+    }
 
     @Override
     public D deleteById(@NonNull ID id) {
-        R deleted = getDsl().update(getTable()).set(getIsDeletedField(), Boolean.TRUE).where(getIdField().eq(id)).returning().fetchOne();
+        DSLContext dsl = getDsl();
+        R deleted = dsl.update(getTable()).set(getIsDeletedField(), Boolean.TRUE).where(getIdField().eq(id)).returning().fetchOne();
 
         if (deleted == null) {
             return null;
@@ -252,7 +267,8 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
             return List.of();
         }
 
-        List<E> entities = getDsl().update(getTable()).set(getIsDeletedField(), Boolean.TRUE).where(getIdField().in(idList)).returning().fetch().into(entityClass);
+        DSLContext dsl = getDsl();
+        List<E> entities = dsl.update(getTable()).set(getIsDeletedField(), Boolean.TRUE).where(getIdField().in(idList)).returning().fetch().into(entityClass);
 
         return mapper.toSecond(entities);
     }
@@ -266,10 +282,10 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
         return deleteById(entity.getId());
     }
 
-	    @Override
-	    public List<D> deleteBulk(@NonNull List<D> domainList) {
-	        return domainList.stream().map(this::delete).filter(Objects::nonNull).collect(java.util.stream.Collectors.toList());
-	    }
+    @Override
+    public List<D> deleteBulk(@NonNull List<D> domainList) {
+        return domainList.stream().map(this::delete).filter(Objects::nonNull).collect(java.util.stream.Collectors.toList());
+    }
 
     @Override
     public PageResponse<D> getAllPaginated(@NonNull PageRequest pageRequest) {
@@ -335,7 +351,7 @@ public abstract class BasePostgresRepoImpl<R extends UpdatableRecord<R>, E exten
         return getIsDeletedField().isNull().or(getIsDeletedField().eq(Boolean.FALSE));
     }
 
-    protected Condition clusterCondition(Condition baseCondition) {
+    protected Condition  clusterCondition(Condition baseCondition) {
         String clusterType = TekionContextProvider.getClusterType();
         if (clusterType == null) {
             return DSL.noCondition();
